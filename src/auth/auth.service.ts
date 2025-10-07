@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/models/user.model';
@@ -72,4 +72,54 @@ export class AuthService {
         accsessToken
     }
   }
+
+  async logout (refreshToken: string, res:Response){
+    const userDate = await this.jwtservice.verify(refreshToken, {
+      secret: process.env.REFRESH_sECTER_KEy
+    });
+    if(!userDate){
+      throw new ForbiddenException("User not varified")
+    }
+    const user = await this.usersService.findOne(userDate.id)
+    if(!user){
+      throw new BadRequestException("Notog'ri token")
+    }
+    user.refresh_token = ""
+    await user.save()
+
+    res.clearCookie("refreshToken")
+    return {
+      message: "User Loged out"
+    }
+
+  }
+
+  async refreshToken(userId: number, refresh_token: string, res:Response){
+    const decodToken = await this.jwtservice.decode(refresh_token)
+
+
+    if(userId !== decodToken["id"]){
+      throw new ForbiddenException("Ruxsat erilmagan id")
+    }
+    const user = await this.usersService.findOne(userId)
+
+    if(!user || !user.refresh_token){
+      throw new ForbiddenException("Foribbden")
+    }
+
+    const  {accsessToken, refreshToken} = await  this.genereteTokens(user)
+    user.refresh_token = await bcrypt.hash(refreshToken, 7)
+    await user.save()
+
+    res.cookie("refreshToken", refreshToken, {
+      maxAge: Number(process.env.COOKIE_TIME),
+      httpOnly: true
+    });
+    return {
+      message: "User refreshed",
+      userId: user.id,
+      accsessToken
+    }
+  }
+
 }

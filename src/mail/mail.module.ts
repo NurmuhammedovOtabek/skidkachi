@@ -4,7 +4,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { HandlebarsAdapter } from "@nestjs-modules/mailer/dist/adapters/handlebars.adapter";
-import { strict } from 'assert';
 
 @Module({
   imports: [
@@ -22,7 +21,7 @@ import { strict } from 'assert';
           from: `Skidkachi <${config.get<string>("MAILDEV_USER")}>`,
         },
         template:{
-          dir:join(__dirname, 'tamplate'),
+          dir:join(__dirname, 'templates'),
           adapter: new HandlebarsAdapter(),
           template:'confirmation',
           options:{
