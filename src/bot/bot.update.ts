@@ -8,174 +8,188 @@ export class BotUpdate {
 
   @Start()
   async start(@Ctx() ctx: Context) {
-    ctx.reply("Welecome");
-  }
-
-  @On("photo")
-  async onPhoto(@Ctx() ctx: Context) {
-    if ("photo" in ctx.message!) {
-      console.log(ctx.message.photo);
-      await ctx.replyWithPhoto(
-        ctx.message.photo[ctx.message.photo.length - 1].file_id
-      );
-    }
-  }
-
-  @On("video")
-  async onVideo(@Ctx() ctx: Context) {
-    if ("video" in ctx.message!) {
-      console.log(ctx.message.video);
-      await ctx.reply(ctx.message.video.file_name!);
-    }
-  }
-
-  @On("sticker")
-  async onSticer(@Ctx() ctx: Context) {
-    if ("sticer" in ctx.message!) {
-      console.log(ctx.message.sticer);
-      // await ctx.replyWithSticker(ctx.message.sticer!);
-      await ctx.reply("😂");
-    }
-  }
-
-  @On("animation")
-  async onAnimation(@Ctx() ctx: Context) {
-    if ("animation" in ctx.message!) {
-      console.log(ctx.message.animation);
-      // await ctx.replyWithSticker(ctx.message.animation!);
-      await ctx.reply(ctx.message.animation.file_name!);
-    }
-  }
-
-  @On("voice")
-  async onVoise(@Ctx() ctx: Context) {
-    if ("voice" in ctx.message!) {
-      console.log(ctx.message.voice);
-      await ctx.replyWithVoice(ctx.message.voice.file_id);
-      await ctx.reply(ctx.message.voice.mime_type!);
-    }
+    await this.botService.start(ctx)
   }
 
   @On("contact")
   async onContact(@Ctx() ctx: Context) {
-    if ("contact" in ctx.message!) {
-      console.log(ctx.message.contact);
-      await ctx.reply(ctx.message.contact.phone_number);
-      await ctx.reply(String(ctx.message.contact.user_id));
-      await ctx.reply(String(ctx.message.contact.first_name));
-    }
+    await this.botService.onContact(ctx)
   }
 
-  @On("location")
-  async onLocation(@Ctx() ctx: Context) {
-    if ("location" in ctx.message!) {
-      console.log(ctx.message.location);
-      await ctx.replyWithLocation(
-        ctx.message.location.latitude,
-        ctx.message.location.longitude
-      );
-    }
-  }
+  // @On("photo")
+  // async onPhoto(@Ctx() ctx: Context) {
+  //   if ("photo" in ctx.message!) {
+  //     console.log(ctx.message.photo);
+  //     await ctx.replyWithPhoto(
+  //       ctx.message.photo[ctx.message.photo.length - 1].file_id
+  //     );
+  //   }
+  // }
 
-  @Hears("hi")
-  async hearsHi(@Ctx() ctx: Context) {
-    await ctx.replyWithHTML("<b>Hi there</b>");
-  }
+  // @On("video")
+  // async onVideo(@Ctx() ctx: Context) {
+  //   if ("video" in ctx.message!) {
+  //     console.log(ctx.message.video);
+  //     await ctx.reply(ctx.message.video.file_name!);
+  //   }
+  // }
 
-  @Command("help")
-  async helpCommand(@Ctx() ctx: Context) {
-    await ctx.replyWithHTML("<b>Biz ishlamayapmiz</b>");
-  }
+  // @On("sticker")
+  // async onSticer(@Ctx() ctx: Context) {
+  //   if ("sticer" in ctx.message!) {
+  //     console.log(ctx.message.sticer);
+  //     // await ctx.replyWithSticker(ctx.message.sticer!);
+  //     await ctx.reply("😂");
+  //   }
+  // }
 
-  @Hears("olti")
-  async hearsOlti(@Ctx() ctx: Context) {
-    await ctx.replyWithHTML("<b>6 there</b>");
-  }
+  // @On("animation")
+  // async onAnimation(@Ctx() ctx: Context) {
+  //   if ("animation" in ctx.message!) {
+  //     console.log(ctx.message.animation);
+  //     // await ctx.replyWithSticker(ctx.message.animation!);
+  //     await ctx.reply(ctx.message.animation.file_name!);
+  //   }
+  // }
 
-  @Action("product_1")
-  async prod_1(@Ctx() ctx: Context) {
-    await ctx.replyWithHTML("<b>1 bosildi</b>");
-  }
+  // @On("voice")
+  // async onVoise(@Ctx() ctx: Context) {
+  //   if ("voice" in ctx.message!) {
+  //     console.log(ctx.message.voice);
+  //     await ctx.replyWithVoice(ctx.message.voice.file_id);
+  //     await ctx.reply(ctx.message.voice.mime_type!);
+  //   }
+  // }
 
-  @Command("main")
-  async mainKeyboard(@Ctx() ctx: Context) {
-    await ctx.replyWithHTML("<b>Main button ni tanla</b>", {
-      parse_mode: "HTML",
-      ...Markup.keyboard([
-        ["bir", "ikki", "uch"],
-        ["Tort", "besh"],
-        ["olti"],
-        [Markup.button.contactRequest(" telefon reqamingni yubor")],
-        [Markup.button.locationRequest(" Turgan manzilingni yubor")],
-      ])
-        .resize()
-        .oneTime(),
-    });
-  }
+  // @On("contact")
+  // async onContact(@Ctx() ctx: Context) {
+  //   if ("contact" in ctx.message!) {
+  //     console.log(ctx.message.contact);
+  //     await ctx.reply(ctx.message.contact.phone_number);
+  //     await ctx.reply(String(ctx.message.contact.user_id));
+  //     await ctx.reply(String(ctx.message.contact.first_name));
+  //   }
+  // }
 
-  @Command("inline")
-  async inlineKeyboard(@Ctx() ctx: Context) {
-    const Keyboards = [
-      [
-        {
-          text: "Product 1",
-          callback_data: "product_1",
-        },
-        {
-          text: "Product 2",
-          callback_data: "product_2",
-        },
-        {
-          text: "Product 3",
-          callback_data: "product_3",
-        },
-      ],
-      [
-        {
-          text: "Product 4",
-          callback_data: "product_4",
-        },
-        {
-          text: "Product 5",
-          callback_data: "product_5",
-        },
-      ],
-      [
-        {
-          text: "Product 6",
-          callback_data: "product_6",
-        },
-      ],
-    ];
-    await ctx.replyWithHTML("<b>Productni tanlang</b>", {
-      parse_mode: "HTML",
-      reply_markup: {
-        inline_keyboard: Keyboards,
-      },
-    });
-  }
+  // @On("location")
+  // async onLocation(@Ctx() ctx: Context) {
+  //   if ("location" in ctx.message!) {
+  //     console.log(ctx.message.location);
+  //     await ctx.replyWithLocation(
+  //       ctx.message.location.latitude,
+  //       ctx.message.location.longitude
+  //     );
+  //   }
+  // }
 
-  //
-  ///
+  // @Hears("hi")
+  // async hearsHi(@Ctx() ctx: Context) {
+  //   await ctx.replyWithHTML("<b>Hi there</b>");
+  // }
 
-  @On("text")
-  async onText(@Ctx() ctx: Context) {
-    console.log(ctx);
-    if ("text" in ctx.message!) {
-      if (ctx.message.text == "hello") {
-        await ctx.replyWithHTML("<b>Salom 2</b>");
-      } else {
-        await ctx.replyWithHTML(ctx.message.text);
-      }
-    }
-  }
+  // @Command("help")
+  // async helpCommand(@Ctx() ctx: Context) {
+  //   await ctx.replyWithHTML("<b>Biz ishlamayapmiz</b>");
+  // }
 
-  @On("message")
-  async onmessage(@Ctx() ctx: Context) {
-    console.log(ctx.botInfo);
-    console.log(ctx.chat);
-    console.log(ctx.chat?.type);
-    console.log(ctx.from);
-    console.log(ctx.from?.username);
-  }
+  // @Hears("olti")
+  // async hearsOlti(@Ctx() ctx: Context) {
+  //   await ctx.replyWithHTML("<b>6 there</b>");
+  // }
+
+  // @Action("product_1")
+  // async prod_1(@Ctx() ctx: Context) {
+  //   await ctx.replyWithHTML("<b>1 bosildi</b>");
+  // }
+
+  // @Action(/^product_\d/)
+  // async anyProductSelect(@Ctx() ctx: Context) {
+  //   if("data" in ctx.callbackQuery!){
+  //     const data = ctx.callbackQuery?.data
+  //     const productId = data.split("_")[1]
+  //     await ctx.replyWithHTML(`<b>${productId} bosildi</b>`);
+  //   }
+  // }
+
+  // @Command("main")
+  // async mainKeyboard(@Ctx() ctx: Context) {
+  //   await ctx.replyWithHTML("<b>Main button ni tanla</b>", {
+  //     parse_mode: "HTML",
+  //     ...Markup.keyboard([
+  //       ["bir", "ikki", "uch"],
+  //       ["Tort", "besh"],
+  //       ["olti"],
+  //       [Markup.button.contactRequest(" telefon reqamingni yubor")],
+  //       [Markup.button.locationRequest(" Turgan manzilingni yubor")],
+  //     ])
+  //       .resize()
+  //       .oneTime(),
+  //   });
+  // }
+
+  // @Command("inline")
+  // async inlineKeyboard(@Ctx() ctx: Context) {
+  //   const Keyboards = [
+  //     [
+  //       {
+  //         text: "Product 1",
+  //         callback_data: "product_1",
+  //       },
+  //       {
+  //         text: "Product 2",
+  //         callback_data: "product_2",
+  //       },
+  //       {
+  //         text: "Product 3",
+  //         callback_data: "product_3",
+  //       },
+  //     ],
+  //     [
+  //       {
+  //         text: "Product 4",
+  //         callback_data: "product_4",
+  //       },
+  //       {
+  //         text: "Product 5",
+  //         callback_data: "product_5",
+  //       },
+  //     ],
+  //     [
+  //       {
+  //         text: "Product 6",
+  //         callback_data: "product_6",
+  //       },
+  //     ],
+  //   ];
+  //   await ctx.replyWithHTML("<b>Productni tanlang</b>", {
+  //     parse_mode: "HTML",
+  //     reply_markup: {
+  //       inline_keyboard: Keyboards,
+  //     },
+  //   });
+  // }
+
+  // //
+  // ///
+
+  // @On("text")
+  // async onText(@Ctx() ctx: Context) {
+  //   console.log(ctx);
+  //   if ("text" in ctx.message!) {
+  //     if (ctx.message.text == "hello") {
+  //       await ctx.replyWithHTML("<b>Salom 2</b>");
+  //     } else {
+  //       await ctx.replyWithHTML(ctx.message.text);
+  //     }
+  //   }
+  // }
+
+  // @On("message")
+  // async onmessage(@Ctx() ctx: Context) {
+  //   console.log(ctx.botInfo);
+  //   console.log(ctx.chat);
+  //   console.log(ctx.chat?.type);
+  //   console.log(ctx.from);
+  //   console.log(ctx.from?.username);
+  // }
 }
