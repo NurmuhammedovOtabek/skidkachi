@@ -16,6 +16,11 @@ export class BotUpdate {
     await this.botService.onContact(ctx)
   }
 
+  @Command("stop")
+  async onstop(@Ctx() ctx: Context){
+    await this.botService.onStop(ctx)
+  }
+
   // @On("photo")
   // async onPhoto(@Ctx() ctx: Context) {
   //   if ("photo" in ctx.message!) {

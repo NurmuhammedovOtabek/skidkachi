@@ -8,5 +8,6 @@ import { Bot } from './models/bot.model';
   imports:[SequelizeModule.forFeature([Bot])],
   controllers: [],
   providers: [BotService, BotUpdate],
+  exports:[BotService]
 })
 export class BotModule {}

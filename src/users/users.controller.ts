@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserAuthGuard } from '../common/guards/user-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { PhoneUserDto } from './dto/phone-user.dto';
 
 @Controller("users")
 export class UsersController {
@@ -38,5 +39,10 @@ export class UsersController {
   @Delete(":id")
   remove(@Param("id") id: string) {
     return this.usersService.remove(+id);
+  }
+
+  @Post("new-otp")
+  newOtp(@Body() phoneUserDto: PhoneUserDto){
+    return this.usersService.newOtp(phoneUserDto)
   }
 }

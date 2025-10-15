@@ -65,7 +65,7 @@ export class BotService {
         const user = await this.botModel.findByPk(user_id);
         if (!user) {
           await ctx.replyWithHTML("/start", {
-            ...Markup.keyboard([[Markup.button.contactRequest(`/start`)]])
+            ...Markup.keyboard([[(`/start`)]])
               .oneTime()
               .resize(),
           });
@@ -80,21 +80,56 @@ export class BotService {
                 .resize(),
             }
           );
-        } else{
+        } else {
           const phone = ctx.message.contact.phone_number;
-          user.is_active = true
-          user.phone_number = phone[0]=="+" ? phone : "+" + phone
-          await user.save()
-          await ctx.replyWithHTML(
-            "tabriklaymiz royxatdan otdingiz",
-            {
-              ...Markup.removeKeyboard()
-            }
-          );
+          user.is_active = true;
+          user.phone_number = phone[0] == "+" ? phone : "+" + phone;
+          await user.save();
+          await ctx.replyWithHTML("tabriklaymiz royxatdan otdingiz", {
+            ...Markup.removeKeyboard(),
+          });
         }
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async onStop(ctx: Context) {
+    try {
+      const user_id = ctx.from!.id;
+      const user = await this.botModel.findByPk(user_id);
+      await this.bot.telegram.sendMessage(user_id,"xayr")
+
+      if (user) {
+        user.is_active = false;
+        await user.save();
+        await ctx.replyWithHTML(
+          "siz botda foaliyatingizni tixtadingiz /start ni bosing",
+          {
+            ...Markup.keyboard([[(`/start`)]])
+              .oneTime()
+              .resize(),
+          }
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async sendOtp(phone_number: string, otp: string){
+    try{
+      const user = await this.botModel.findOne({where:{phone_number}});
+      if(!user || !user.is_active){
+        return false
+      }
+
+      await this.bot.telegram.sendMessage(user.user_id, `verify code: `+ otp)
+      return true
+    }catch(error){
+      console.log(error);
+      
     }
   }
 }
