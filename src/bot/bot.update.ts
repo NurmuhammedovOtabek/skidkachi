@@ -8,28 +8,38 @@ export class BotUpdate {
 
   @Start()
   async start(@Ctx() ctx: Context) {
-    await this.botService.start(ctx)
+    await this.botService.start(ctx);
   }
 
   @On("contact")
   async onContact(@Ctx() ctx: Context) {
-    await this.botService.onContact(ctx)
+    await this.botService.onContact(ctx);
   }
 
   @Command("stop")
-  async onstop(@Ctx() ctx: Context){
-    await this.botService.onStop(ctx)
+  async onstop(@Ctx() ctx: Context) {
+    await this.botService.onStop(ctx);
   }
 
-  // @On("photo")
-  // async onPhoto(@Ctx() ctx: Context) {
-  //   if ("photo" in ctx.message!) {
-  //     console.log(ctx.message.photo);
-  //     await ctx.replyWithPhoto(
-  //       ctx.message.photo[ctx.message.photo.length - 1].file_id
-  //     );
-  //   }
-  // }
+  @Hears("Asosiy menyuga qaytish")
+  async mainMenu(@Ctx() ctx: Context) {
+    await this.botService.mainMenu(ctx);
+  }
+
+  @On("location")
+  async onLocation(@Ctx() ctx: Context) {
+    await this.botService.onLocation(ctx)
+  }
+
+  @On("text")
+  async onText(@Ctx() ctx: Context) {
+    await this.botService.onText(ctx);
+  }
+
+  @On("photo")
+  async onPhoto(@Ctx() ctx: Context) {
+    await this.botService.onPhoto(ctx)
+  }
 
   // @On("video")
   // async onVideo(@Ctx() ctx: Context) {
@@ -73,17 +83,6 @@ export class BotUpdate {
   //     await ctx.reply(ctx.message.contact.phone_number);
   //     await ctx.reply(String(ctx.message.contact.user_id));
   //     await ctx.reply(String(ctx.message.contact.first_name));
-  //   }
-  // }
-
-  // @On("location")
-  // async onLocation(@Ctx() ctx: Context) {
-  //   if ("location" in ctx.message!) {
-  //     console.log(ctx.message.location);
-  //     await ctx.replyWithLocation(
-  //       ctx.message.location.latitude,
-  //       ctx.message.location.longitude
-  //     );
   //   }
   // }
 
